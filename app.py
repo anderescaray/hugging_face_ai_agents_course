@@ -3,15 +3,19 @@ import gradio as gr
 import requests
 import pandas as pd
 from dotenv import load_dotenv
-from smolagents import CodeAgent, HfApiModel, DuckDuckGoSearchTool
+try:
+    from smolagents import CodeAgent, DuckDuckGoSearchTool, HfApiModel
+except ImportError:
+    # Si falla la anterior, es que está en el nuevo submódulo de modelos
+    from smolagents import CodeAgent, DuckDuckGoSearchTool
+    from smolagents.models import HfApiModel
 
-# 1. CARGA DE CONFIGURACIÓN
+# 1. CONFIGURATION
 load_dotenv()
-# Intentamos obtener el token del Secret de HF o del archivo .env local
 hf_token = os.getenv("HF_TOKEN")
 
-# 2. CONFIGURACIÓN DEL AGENTE (smolagents)
-# Usamos Qwen 2.5 Coder 32B por su gran capacidad de razonamiento
+# 2. CONFIGURATE THE AGENT (smolagents)
+# Use Qwen 2.5 Coder 32B for its great reasoning ability
 model = HfApiModel(
     model_id="Qwen/Qwen2.5-Coder-32B-Instruct",
     token=hf_token
@@ -19,7 +23,7 @@ model = HfApiModel(
 
 search_tool = DuckDuckGoSearchTool()
 
-# Inicializamos el agente fuera de la clase para optimizar rendimiento
+# Initialize the agent outside the class to optimize performance
 smol_agent = CodeAgent(
     tools=[search_tool],
     model=model,
@@ -28,18 +32,18 @@ smol_agent = CodeAgent(
     additional_authorized_imports=["pandas", "numpy", "re", "math"]
 )
 
-# 3. CONSTANTES Y CLASE PARA EL CURSO
+# 3. CONSTANTS AND CLASS
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
 class BasicAgent:
     def __init__(self):
-        print("--- Agente smolagents inicializado con éxito ---")
+        print("--- smolagents agent initialized successfully ---")
 
     def __call__(self, question: str) -> str:
         """
-        Esta función es la que llama el evaluador del curso.
+        This function is called by the course evaluator.
         """
-        print(f"\n[PROCESANDO PREGUNTA]: {question[:100]}...")
+        print(f"\n[PROCESSING QUESTION]: {question[:100]}...")
         
         # Prompt específico para que el agente sea muy directo (clave para GAIA)
         prompt = f"""Solve the following question precisely. 
@@ -53,41 +57,41 @@ class BasicAgent:
             # Ejecutamos la lógica de smolagents
             result = smol_agent.run(prompt)
             final_answer = str(result).strip()
-            print(f"[RESPUESTA GENERADA]: {final_answer}")
+            print(f"[ANSWER GENERATED]: {final_answer}")
             return final_answer
         except Exception as e:
-            print(f"Error en el agente: {e}")
-            return "Error procesando la respuesta."
+            print(f"Error in the agent: {e}")
+            return "Error processing the answer."
 
-# 4. LÓGICA DE EVALUACIÓN Y ENVÍO (Mantenemos la del curso)
+# 4. EVALUATION AND SUBMISSION LOGIC (Keeping the course's logic)
 def run_and_submit_all(profile: gr.OAuthProfile | None):
     space_id = os.getenv("SPACE_ID")
 
     if not profile:
-        return "Por favor, inicia sesión con Hugging Face usando el botón de arriba.", None
+        return "Please log in with Hugging Face using the button above.", None
 
     username = profile.username
     api_url = DEFAULT_API_URL
     questions_url = f"{api_url}/questions"
     submit_url = f"{api_url}/submit"
 
-    # Instanciamos nuestro agente
+    # Instantiate our agent
     try:
         agent = BasicAgent()
     except Exception as e:
-        return f"Error inicializando el agente: {e}", None
+        return f"Error initializing the agent: {e}", None
 
     agent_code = f"https://huggingface.co/spaces/{space_id}/tree/main"
 
-    # Obtener preguntas
+    # Get questions
     try:
         response = requests.get(questions_url, timeout=15)
         response.raise_for_status()
         questions_data = response.json()
     except Exception as e:
-        return f"Error obteniendo preguntas: {e}", None
+        return f"Error getting questions: {e}", None
 
-    # Ejecutar agente en todas las preguntas
+    # Execute agent on all questions
     results_log = []
     answers_payload = []
     for item in questions_data:
@@ -100,7 +104,7 @@ def run_and_submit_all(profile: gr.OAuthProfile | None):
         except Exception as e:
             results_log.append({"Task ID": task_id, "Answer": f"ERROR: {e}"})
 
-    # Enviar al servidor de scoring
+    # Submit to scoring server
     submission_data = {
         "username": username,
         "agent_code": agent_code,
@@ -113,26 +117,26 @@ def run_and_submit_all(profile: gr.OAuthProfile | None):
         result_data = response.json()
         
         status = (
-            f"✅ Envío realizado con éxito!\n"
-            f"Usuario: {result_data.get('username')}\n"
-            f"Puntuación: {result_data.get('score')}% "
-            f"({result_data.get('correct_count')}/{result_data.get('total_attempted')} correctas)\n"
-            f"Mensaje: {result_data.get('message')}"
+            f"✅ Submission successful!\n"
+            f"User: {result_data.get('username')}\n"
+            f"Score: {result_data.get('score')}% "
+            f"({result_data.get('correct_count')}/{result_data.get('total_attempted')} correct)\n"
+            f"Message: {result_data.get('message')}"
         )
         return status, pd.DataFrame(results_log)
     except Exception as e:
-        return f"Error en el envío: {e}", pd.DataFrame(results_log)
+        return f"Error submitting: {e}", pd.DataFrame(results_log)
 
-# 5. INTERFAZ GRADIO
+# 5. GRADIO INTERFACE
 with gr.Blocks() as demo:
-    gr.Markdown("# 🤖 Agente Final - AI Agents Course")
-    gr.Markdown("Haz clic en el botón para que el agente resuelva el benchmark GAIA y envíe tu nota.")
+    gr.Markdown("# 🤖 Final Agent - AI Agents Course")
+    gr.Markdown("Click the button to make the agent solve the GAIA benchmark and submit your score.")
     
     gr.LoginButton()
-    run_button = gr.Button("🚀 Ejecutar Evaluación y Enviar Todo", variant="primary")
+    run_button = gr.Button("🚀 Run Evaluation and Submit All", variant="primary")
     
-    status_output = gr.Textbox(label="Estado del Envío", lines=5)
-    results_table = gr.DataFrame(label="Detalle de Respuestas")
+    status_output = gr.Textbox(label="Submission Status", lines=5)
+    results_table = gr.DataFrame(label="Answer Details")
 
     run_button.click(
         fn=run_and_submit_all,
