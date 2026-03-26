@@ -1,2 +1,7 @@
 gradio
 requests
+smolagents
+duckduckgo-search
+python-dotenv
+pandas
+pillow
