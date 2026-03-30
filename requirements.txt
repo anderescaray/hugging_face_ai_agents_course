@@ -1,8 +1,9 @@
+gradio
+requests
 smolagents>=1.1.0
 litellm
 duckduckgo-search
+ddgs
 python-dotenv
 pandas
-gradio
-requests
 pillow
