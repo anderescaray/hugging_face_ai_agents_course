@@ -1,26 +1,35 @@
+---
+title: GAIA Benchmark Solver
+emoji: 🏅
+colorFrom: blue
+colorTo: indigo
+sdk: gradio
+sdk_version: "4.40.0"
+app_file: app.py
+pinned: false
+---
+
 # 🏅 GAIA Benchmark Solver
 
 **Hugging Face AI Agents Course — Unit 4 Final Assignment**
 
 Multimodal AI agent that solves [GAIA Level 1](https://huggingface.co/datasets/gaia-benchmark/GAIA) benchmark questions. Achieved **70% (14/20)** on the evaluation set.
 
-[![Hugging Face Space](https://img.shields.io/badge/🤗-Live%20Space-yellow)](https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE)
+[![Hugging Face Space](https://img.shields.io/badge/🤗-Live%20Space-yellow)](https://huggingface.co/spaces/anderescaray/final_assignment_ai_agents_course)
 
 ---
 
 ## Architecture
 
-```
-app.py                  ← Gradio UI + benchmark runner
-agent/
-  model.py              ← LLM backend (Claude Haiku via LiteLLM)
-  solver.py             ← GAIASolver: CodeAgent orchestration loop
-  prompts.py            ← Exact-match answer formatting rules
-tools/
-  download.py           ← GAIA attached file downloader
-  audio.py              ← Whisper-based audio transcription
-  youtube.py            ← YouTube transcript extraction
-```
+    app.py                  ← Gradio UI + benchmark runner
+    agent/
+      model.py              ← LLM backend (Claude Haiku via LiteLLM)
+      solver.py             ← GAIASolver: CodeAgent orchestration loop
+      prompts.py            ← Exact-match answer formatting rules
+    tools/
+      download.py           ← GAIA attached file downloader
+      audio.py              ← Whisper-based audio transcription
+      youtube.py            ← YouTube transcript extraction
 
 **Model:** `claude-haiku-4-5-20251001` (Anthropic) via LiteLLM  
 **Agent:** smolagents `CodeAgent` — uses Python as its reasoning substrate  
@@ -42,27 +51,17 @@ tools/
 
 ### 1. Clone & install
 
-```bash
-git clone https://github.com/YOUR_USERNAME/gaia-agent
-cd gaia-agent
-pip install -r requirements.txt
-```
+    git clone https://github.com/anderescaray/gaia-agent
+    cd gaia-agent
+    pip install -r requirements.txt
 
 ### 2. Configure secrets
-
-```bash
-# .env (local development)
-ANTHROPIC_API_KEY=sk-ant-...
-HF_TOKEN=hf_...
-```
 
 For HF Spaces: add `ANTHROPIC_API_KEY` and `HF_TOKEN` as **Space secrets**.
 
 ### 3. Run
 
-```bash
-python app.py
-```
+    python app.py
 
 ---
 
@@ -76,4 +75,3 @@ python app.py
 | HF Inference endpoints unreliable for large models | Switched to Anthropic API via LiteLLM |
 
 ---
-
