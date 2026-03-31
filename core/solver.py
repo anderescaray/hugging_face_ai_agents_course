@@ -5,9 +5,9 @@ from smolagents import CodeAgent, LiteLLMModel
 from smolagents import DuckDuckGoSearchTool, VisitWebpageTool
 
 from core.prompts import ANSWER_RULES
-from tools.download import DownloadTaskFileTool
-from tools.audio import AudioTranscriptionTool
-from tools.youtube import YouTubeTranscriptTool
+from mytools.download import DownloadTaskFileTool
+from mytools.audio import AudioTranscriptionTool
+from mytools.youtube import YouTubeTranscriptTool
 
 
 class GAIASolver:
