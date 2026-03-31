@@ -24,7 +24,8 @@ import pandas as pd
 import gradio as gr
 from dotenv import load_dotenv
 
-from agent import build_model, GAIASolver
+from core.model import build_model
+from core.solver import GAIASolver
 
 # ---------------------------------------------------------------------------
 # Environment

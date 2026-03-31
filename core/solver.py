@@ -4,7 +4,7 @@ import traceback
 from smolagents import CodeAgent, LiteLLMModel
 from smolagents import DuckDuckGoSearchTool, VisitWebpageTool
 
-from agent.prompts import ANSWER_RULES
+from core.prompts import ANSWER_RULES
 from tools.download import DownloadTaskFileTool
 from tools.audio import AudioTranscriptionTool
 from tools.youtube import YouTubeTranscriptTool
