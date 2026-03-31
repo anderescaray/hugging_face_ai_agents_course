@@ -5,6 +5,7 @@ litellm
 duckduckgo-search
 ddgs
 markdownify
+youtube-transcript-api
 python-dotenv
 pandas
 pillow
