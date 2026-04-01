@@ -6,12 +6,6 @@ def build_model() -> LiteLLMModel:
     """
     Instantiate the LLM backend using Anthropic Claude Haiku via LiteLLM.
 
-    Claude Haiku is the recommended model for this benchmark:
-      - Reliable tool use with smolagents CodeAgent
-      - Fast enough to complete 20 questions without timeouts
-      - Cost: ~$0.05-0.15 for a full 20-question benchmark run
-
-    Upgrade to claude-sonnet-4-20250514 for higher accuracy if needed.
     Requires ANTHROPIC_API_KEY to be set in environment or .env file.
     """
     api_key = os.getenv("ANTHROPIC_API_KEY")

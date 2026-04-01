@@ -4,17 +4,16 @@ GAIA Benchmark Solver — Hugging Face AI Agents Course (Unit 4)
 Entry point: Gradio UI + benchmark runner.
 
 Architecture:
-    agent/model.py   — LLM backend (Anthropic Claude Haiku via LiteLLM)
-    agent/solver.py  — GAIASolver: smolagents CodeAgent orchestration
-    agent/prompts.py — Exact-match answer formatting rules
-    tools/download.py — GAIA attached file downloader
-    tools/audio.py   — Whisper-based audio transcription
-    tools/youtube.py — YouTube transcript extraction
+    core/model.py   — LLM backend (Anthropic Claude Haiku via LiteLLM)
+    core/solver.py  — GAIASolver: smolagents CodeAgent orchestration
+    core/prompts.py — Exact-match answer formatting rules
+    mytools/download.py — GAIA attached file downloader
+    mytools/audio.py   — Whisper-based audio transcription
+    mytools/youtube.py — YouTube transcript extraction
 
 Setup (HF Space secrets):
-    ANTHROPIC_API_KEY  — from console.anthropic.com (required)
-    HF_TOKEN           — your HF token (required for login + submission)
-    SPACE_ID           — set automatically by HF Spaces
+    ANTHROPIC_API_KEY  
+    HF_TOKEN                     
 """
 
 import os
