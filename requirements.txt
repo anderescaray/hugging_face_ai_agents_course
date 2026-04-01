@@ -29,7 +29,7 @@ numpy>=1.24.0
 pillow>=10.0.0
 
 # UI
-gradio>=4.40.0
+gradio
 
 # Environment
 python-dotenv>=1.0.0
